@@ -1,54 +1,51 @@
 package com.edmonbl.cuartitocapp.ui.screens
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.AsyncImagePainter
-import coil.compose.rememberAsyncImagePainter
-import com.edmonbl.cuartitocapp.R
-import com.edmonbl.cuartitocapp.students
+import coil.compose.AsyncImage
+import com.edmonbl.cuartitocapp.ui.viewmodel.StudentViewModel
 
 @Composable
-fun StudentDetailScreen(navController: NavController, studentId: Int?) {
+fun StudentDetailScreen(navController: NavController, studentViewModel: StudentViewModel, studentId: Int?) {
+    val students by studentViewModel.studentsUiState.collectAsState()
     val student = students.find { it.id == studentId }
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .padding(16.dp)) {
         if (student != null) {
             Text(text = "Student Details", modifier = Modifier.padding(bottom = 16.dp))
-            val painter = rememberAsyncImagePainter(model = student.imageUrl)
-
-            Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
-                when (painter.state) {
-                    is AsyncImagePainter.State.Loading -> {
-                        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                    }
-                    is AsyncImagePainter.State.Error -> {
-                        Text(
-                            text = "Image failed to load",
-                            modifier = Modifier.align(Alignment.Center)
-                        )
-                    }
-                    else -> {
-                        Image(
-                            painter = painter,
-                            contentDescription = "Student Image",
-                            modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.Crop
-                        )
-                    }
-                }
-            }
+            AsyncImage(
+                model = student.imageUrl,
+                contentDescription = student.name,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
+                contentScale = ContentScale.Crop
+            )
             Spacer(modifier = Modifier.height(16.dp))
             Text(text = "Name: ${student.name}")
             Text(text = "Description: ${student.description}")
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(onClick = {
+                studentViewModel.deleteStudent(student)
+                navController.popBackStack()
+            }) {
+                Text("Delete Student")
+            }
         } else {
             Text(text = "Student not found")
         }
