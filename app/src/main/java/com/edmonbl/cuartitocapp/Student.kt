@@ -8,8 +8,8 @@ data class Student(
 )
 
 val students = listOf(
-    Student(1, "John Doe", "A diligent student", "https://example.com/image1.jpg"),
-    Student(2, "Jane Smith", "An excellent coder", "https://example.com/image2.jpg"),
+    Student(1, "Eugenio Derbez", "Actor chido", "https://variety.com/wp-content/uploads/2016/03/eugenio-derbez.jpg"),
+    Student(2, "Ludovico Peluche", "Papá que le va al Cruz Azul", "https://example.com/image2.jpg"),
     Student(3, "Alice Johnson", "Loves mathematics", "https://example.com/image3.jpg"),
     Student(4, "Bob Brown", "Enjoys physics", "https://example.com/image4.jpg"),
     Student(5, "Charlie Davis", "A creative thinker", "https://example.com/image5.jpg"),
